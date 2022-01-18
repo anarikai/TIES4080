@@ -1,3 +1,4 @@
+from errno import ENOANO
 from pickle import GET
 from urllib import response
 from flask import Flask
@@ -6,6 +7,7 @@ import requests
 from flask import Response
 from flask import request
 import json
+
 
 @app.route('/vt1', methods=['GET']) #Tämä rivi kertoo osoitteen, josta tämä sovellus löytyy
 def listaaJoukkueet():
@@ -40,12 +42,10 @@ def listaaJoukkueet():
 				memberNameList.append(member)
 		#print(memberNameList)
 
-	joukkueet = joukkueLista(response)
+	kayRastitLapi(response)
 
 	#Järjestetään teamNameList-muuttujan joukkueet nimen perusteella aakkosjärjestykseen
 	teamNameList = sorted(teamNameList, key=lambda k: k['nimi'].lower())
-	# Järjestetään memberNameList-taulukon jäsenet nimen perusteella aakkosjärjestykseen
-	#memberNameList = sorted(memberNameList, key=lambda k: k['jasenet'].lower())
 	#Lisätään teamNameList-muuttujan joukkueet teamString-merkkijonoon
 	for each in teamNameList:
 		teamString = teamString + each['nimi'] + '\n'
@@ -139,11 +139,48 @@ def uusiId(response):
 				suurinId = kaikkiIdt[i]
 	return suurinId + 1
 
+# Otetaan talteen koko joukkueet-olio
 def joukkueLista(response):
 	kaikkiJoukkueet = []
 	sarjat = response['sarjat']
-	for each in sarjat:
-		for j in each['joukkueet']:
-			kaikkiJoukkueet.append(j)
-	print(kaikkiJoukkueet)
+	for sarja in sarjat:
+		for joukkue in sarja['joukkueet']:
+			kaikkiJoukkueet.append(joukkue)
+	#print(kaikkiJoukkueet)
 	return kaikkiJoukkueet
+
+def kayRastitLapi(data):
+	joukkueet = joukkueLista(data)
+	rastit = data['rastit']
+
+	for joukkue in joukkueet:
+		lahto = []
+		maali = []
+		pisteet = 0
+		for leimaus in joukkue['leimaukset']:
+			for rasti in rastit:
+				if str(leimaus['rasti']) == str(rasti['id']):
+					if str(rasti['koodi']) == 'LAHTO':
+						lahto.append(leimaus['aika'])
+					if str(rasti['koodi']) == 'MAALI':
+						maali.append(leimaus['aika'])
+		
+		lahto.sort()
+		maali.sort()
+		
+		eiPisteita = False
+		if (len(lahto) == 0 or len(maali) == 0):
+			eiPisteita = True
+		if not eiPisteita:
+			lahtoAika = lahto[-1]
+			for finish in maali:
+				if finish > lahtoAika:
+					maaliAika = finish
+			leimauksetKertaalleen = set()
+			for leimaus in joukkue['leimaukset']:
+				for rasti in rastit:
+					if str(leimaus['rasti']) == str(rasti['id']) and str(rasti['id']) not in leimauksetKertaalleen:
+						if str(lahtoAika) <= str(leimaus['aika']) and str(maaliAika) >= str(leimaus['aika']) and rasti['koodi'][0].isdigit():
+							pisteet = pisteet + int(rasti['koodi'][0])
+							leimauksetKertaalleen.add(str(rasti['id']))
+		print(joukkue['nimi'] + ' ' + str(pisteet))
