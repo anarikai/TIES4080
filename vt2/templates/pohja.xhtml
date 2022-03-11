@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fi" xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Pelilauta</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='tyylit.css') }}" />
+    </head>
+    <body>
+        {% macro with_errors(field) %}
+        <div class="form_field">
+            {% if field.errors %}
+                {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
+                {{ field(class=css_class, **kwargs) }}
+                    <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+                {% else %}
+                    {{ field(**kwargs) }}
+            {% endif %}
+        </div>
+        {% endmacro %}
+        <h1>Pelilauta</h1>
+        <p>Kerro luotavan pelialueen koko ja pelaajien nimet. Ruudukko on yhtä monta ruutua leveä kuin korkea.</p>
+        <form action="{{request.base_url}}" method="POST" novalidate="" >
+            <div class="input-text">
+                <div class="input-border">
+                    {{form.koko.label}}{{ with_errors(form.koko)}}
+                    {{form.pelaaja1.label}}{{ with_errors(form.pelaaja1) }}
+                    {{form.pelaaja2.label}}{{ with_errors(form.pelaaja2) }}
+                </div>
+                <div class="form_field input-button"><input type="submit" name="laheta" value="Luo pelilauta" /></div>
+    
+            </div>
+        </form>
+        <div>
+            <div>
+                <table class="pelilauta">
+                    <tbody>
+                            <tr><td id="pelaaja1_nimi" rowspan="{{form.laudankoko+1}}"><h3 class="rotate-text">{{ form.pelaaja1.data }}</h3></td></tr>
+                        {% for row in range(form.laudankoko) %}
+                        <tr>
+                            {% for column in range(form.laudankoko) %}
+                            {% if row%2==0 and column%2==0 or row%2==1 and column%2==1 %}   
+                            <td class="valkoinen">
+                                {% if row==column %}
+                                <img src="https://appro.mit.jyu.fi/ties4080/vt/vt2/blue.svg" alt="nappula" class="sininennappula" />
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                            {% if row%2==1 and column%2==0 or row%2==0 and column%2==1 %}
+                            <td class="musta"></td>
+                            {% endif %}
+                            {% if loop.last and row == 0%}                       
+                            <td id="pelaaja2_nimi" rowspan="{{form.laudankoko}}"><h3 class="rotate-text">{{ form.pelaaja2.data }}</h3></td>
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+<!-- HTMLinspectoria käytetään validointiin. Kannattaa
+vielä varmuuden vuoksi ajaa välillä myös W3C:n validaattori -->
+<!-- Sivun validoinnin W3C:n validaattorilla voit tehdä milloin tahansa näppäinyhdistelmällä CTRL+ALT+V -->
+<script src="https://appro.mit.jyu.fi/tools/htmlinspector/html-inspector.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/validator.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/xml-validator.js"></script>
+</body>
+</html>
+
+

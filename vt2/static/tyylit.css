@@ -1,0 +1,125 @@
+.pelilauta {
+    border-spacing: 0; 
+    border-collapse: collapse;
+    margin-top: 5px;
+}
+
+.pelaaja1 {
+  float: left;
+  text-align: center;
+  white-space: nowrap;
+  border: none;
+}
+
+.pelaaja2 {
+  text-align: center;
+  white-space: nowrap;
+  border: none;
+}
+
+#pelaaja2_nimi {
+  text-align: center;
+  white-space: nowrap;
+  border: none;
+  width: fit-content;
+}
+
+#pelaaja1_nimi {
+  text-align: center;
+  white-space: nowrap;
+  border: none;
+  width: fit-content;
+}
+
+label {
+    float: left;
+    display: block;
+    width: 20%;
+    clear: left;
+    line-height: 1.5em;
+  }
+html {
+    height:100%;
+}
+.pelilauta td {
+    border: 1px solid; 
+    width: 70px; 
+    height: 70px;
+}
+.errors {
+    color: red;
+}
+.pelilauta .valkoinen {
+    background: #FFFFFF;
+}
+
+.pelilauta .musta {
+    background: #000000;
+}
+
+.pelilauta .sininennappula {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+  
+  .virhe {
+    background-color: red;
+    color: white;
+  }
+  
+  .form_field {
+    display: block;
+    float: right;
+    clear: right;
+  
+  }
+  
+  .form_field li, .form_field ul {
+    display: inline;
+    position: absolute;
+    width: 20em;
+    margin: 0;
+    padding: 0;
+  }
+  
+  
+  table {
+    clear: both;
+  }
+  
+  td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .has_error {
+    border: 1px solid red;
+  }
+  
+  th label {
+    float: none;
+    display: inline;
+    text-align: center;
+  }
+
+  .input-text {
+    max-width: 40em;
+    height:10em;
+    margin-bottom: 5em;
+    padding-left: 1em;
+  }
+  .input-button {
+    padding-top:1em;
+    float:left;
+  }
+  .input-border {
+    height:5em;
+    border: 1px solid black;
+    padding: 1em 1em 1em 1em;
+  }
+
+.rotate-text {
+    transform: rotate(-90deg);
+}
