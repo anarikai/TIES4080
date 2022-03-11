@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Viikkotehtävä 3</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='tyylit.css') }}" />
+    </head>
+    <body>
+        {% macro with_errors(field) %}
+        <div class="form_field">
+            {% if field.errors %}
+                {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
+                {{ field(class=css_class, **kwargs) }}
+                    <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+                {% else %}
+                    {{ field(**kwargs) }}
+            {% endif %}
+        </div>
+        {% endmacro %}
+        <h1>Kirjaudu</h1>
+        <form action="{{request.base_url}}" method="POST">
+            <div class="input-text">
+                <div>
+                    {{form.kilpailu.label}}{{ form.kilpailu }}
+                    {{form.tunnus.label}}{{ form.tunnus }}
+                    {{form.salasana.label}}{{ form.salasana }}
+                </div>
+                <div>
+                    <input class="log-in" type="submit" name="laheta" value="Kirjaudu" />
+                </div>
+            </div>
+        </form>
+<!-- HTMLinspectoria käytetään validointiin. Kannattaa
+vielä varmuuden vuoksi ajaa välillä myös W3C:n validaattori -->
+<!-- Sivun validoinnin W3C:n validaattorilla voit tehdä milloin tahansa näppäinyhdistelmällä CTRL+ALT+V -->
+<script src="https://appro.mit.jyu.fi/tools/htmlinspector/html-inspector.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/validator.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/xml-validator.js"></script>
+    </body>
+</html>
+
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Viikkotehtävä 3</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='tyylit.css') }}" />
+    </head>
+    <body>
+        <!--Apinoitu https://www.w3schools.com/howto/howto_js_topnav.asp-->
+        <div class="topnav">
+            <a>{{ kilpailu_nimi }}</a>
+            <a href="">{{ joukkue_nimi }}</a>
+            <a href="https://annarik.eu.pythonanywhere.com/kirjautunut">Joukkuelistaussivu</a>
+        </div>
+        <div>
+        {% for joukkue in joukkueet %}
+            <ul>
+                <li>{{ joukkue['sarjanimi'] }}
+                    <ul>
+                        <li>{{ joukkue['joukkuenimi'] }}
+                            <ul>
+                                {% for jasen in joukkue['jasenet'] %}
+                                {% if jasen|length %}
+                                <li>{{ jasen }}</li>
+                                {% else %}
+                                <p></p>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        {% endfor %}
+
+        </div>
+
+        <p>
+            {{ kaikki_sarjat }}
+        </p>
+
+        <p>
+            {{ joukkueet }}
+        </p>
+<!-- HTMLinspectoria käytetään validointiin. Kannattaa
+vielä varmuuden vuoksi ajaa välillä myös W3C:n validaattori -->
+<!-- Sivun validoinnin W3C:n validaattorilla voit tehdä milloin tahansa näppäinyhdistelmällä CTRL+ALT+V -->
+<script src="https://appro.mit.jyu.fi/tools/htmlinspector/html-inspector.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/validator.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/xml-validator.js"></script>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Viikkotehtävä 3</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='tyylit.css') }}" />
+    </head>
+    <body>
+        {% macro with_errors(field) %}
+        <div class="form_field">
+            {% if field.errors %}
+                {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
+                {{ field(class=css_class, **kwargs) }}
+                    <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+                {% else %}
+                    {{ field(**kwargs) }}
+            {% endif %}
+        </div>
+        {% endmacro %}
+        <!--Apinoitu https://www.w3schools.com/howto/howto_js_topnav.asp-->
+        <div class="topnav">
+            <a>{{ kilpailu_nimi }}</a>
+            <a href="">{{ joukkue_nimi }}</a>
+            <a href="https://annarik.eu.pythonanywhere.com/kirjautunut">Joukkuelistaussivu</a>
+        </div>
+
+        <form action="{{request.base_url}}" method="POST">
+            <div class="input-text">
+                {{ form.sarja.label }}
+                {% for subfield in form.sarja %}
+                <tr>
+                    <td>{{ subfield }}</td>
+                    <td>{{ subfield.label }}</td>
+                </tr>
+                {% endfor %}
+                {{ form.joukkue.label }}{{ form.joukkue }}
+                {{ form.jasen1.label }}{{ form.jasen1 }}
+                {{ form.jasen2.label }}{{ form.jasen2 }}
+                {{ form.jasen3.label }}{{ form.jasen3 }}
+                {{ form.jasen4.label }}{{ form.jasen4 }}
+                {{ form.jasen5.label }}{{ form.jasen5 }}
+                <div>
+                    <input class="submit" type="submit" name="laheta" value="Lähetä" />
+                </div>
+            </div>
+        </form>
+        <p>{{ virhe }}</p>
+<!-- HTMLinspectoria käytetään validointiin. Kannattaa
+vielä varmuuden vuoksi ajaa välillä myös W3C:n validaattori -->
+<!-- Sivun validoinnin W3C:n validaattorilla voit tehdä milloin tahansa näppäinyhdistelmällä CTRL+ALT+V -->
+<script src="https://appro.mit.jyu.fi/tools/htmlinspector/html-inspector.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/validator.js"></script>
+<script src="https://appro.mit.jyu.fi/tools/validator/xml-validator.js"></script>
+    </body>
+</html>
+
+
